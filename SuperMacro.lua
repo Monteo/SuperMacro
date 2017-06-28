@@ -1,4 +1,4 @@
-SUPERMACRO_VERSION = "3.15";
+SUPERMACRO_VERSION = "3.16a";
 UIPanelWindows["SuperMacroFrame"] = { area = "left", pushable = 7, whileDead = 1 };
 UIPanelWindows["SuperMacroOptionsFrame"] = { area = "left", pushable = 0, whileDead = 1 };
 MACRO_ROWS = 3;

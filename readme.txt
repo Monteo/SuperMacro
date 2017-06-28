@@ -2,9 +2,11 @@ TODO
 update readme on how to use "Super" macros
 support DiscordBars, etc.
 
-3.15 beta 2
-Fix Error Tooltips
+3.16a 
 Main Menu icon edit
+
+3.16
+fixed compatibilty with Bongos Action Bars //Does not completely solve the problem
 
 3.15 beta 1 release
 fixed: FindFirstItem returns correct info for use( %d [,%d]) and /use %d [, %d]

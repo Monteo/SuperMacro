@@ -2,6 +2,7 @@
 ## Interface: 11200
 ## Title: SuperMacro
 ## Notes: Unlimited 'Super' macros hold up to 7000 letters. Run macros with keybindings and through other macros and from events. In-game code extender editor. Item link into macros. Tooltips over macros on actionbars. Convenient slash commands and functions.
+## Notes-ruRU: Неограниченные макросы «Супер» могут содержать до 7000 букв. Запуск макросов с привязками клавиш, событиями и другими макросы. Расширеный редактор кода игры. Ссылка на предмет в макрос. Всплывающие подсказки над макросами в области действий. Удобные команды и функции.
 ## First created: Mar 2005
 ## OptionalDeps: 
 ## SavedVariables: SM_VARS SM_EXTEND SM_ACTION_SUPER SM_SUPER

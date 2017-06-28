@@ -93,21 +93,21 @@ function GetActionCooldown( actionid )
 			name,icon,body=GetSuperMacroInfo(superfound);
 		end
 
-local macroname, pic;
-if ( this ) then
-    local name = this:GetName();
-    if ( name == nil or name == '' ) then
-        name = "this:";
-    end
-    macroname=getglobal(name.."Name");
-    if ( macroname ) then
-        macroname:SetText(name);
-    end
-    pic = getglobal(name.."Icon");
-    if ( pic ) then
-        pic:SetTexture(icon);
-    end
-end
+		local macroname, pic;
+		if ( this ) then
+		
+		--fix for Bongos by Luise
+		if this:GetName() then 
+			macroname = getglobal(this:GetName().."Name");
+				if ( macroname ) then
+					macroname:SetText(name);
+				end
+				pic = getglobal(this:GetName().."Icon");
+				if ( pic ) then
+					pic:SetTexture(icon);
+				end
+			end
+		end
 
 		local actiontype, spell, texture = SM_GetActionSpell(name, superfound);
 		if ( actiontype=="spell") then
