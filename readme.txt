@@ -4,6 +4,7 @@ support DiscordBars, etc.
 
 3.16a 
 Main Menu icon edit
+bongos support improved
 
 3.16
 fixed compatibilty with Bongos Action Bars //Does not completely solve the problem
