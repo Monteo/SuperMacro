@@ -9,9 +9,89 @@ function ActionButton_SetTooltip()
 	oldActionButton_SetTooltip();
 	SM_ActionButton_SetTooltip();
 end
+--fix Error: attempt to index a nil value in function 'ActionButton_GetPagedID'  [Monteo]
+oldBActionButton_SetTooltip=BActionButton_SetTooltip;
+function BActionButton_SetTooltip()
+	oldBActionButton_SetTooltip();
+	SM_BActionButton_SetTooltip();
+end
+
+-- Hooking into tooltip caller of Bongos [Fixed by Threewords]
+if (BActionButton ~= nil) then
+	oldUpdateTooltip=BActionButton.UpdateTooltip;
+	BActionButton.UpdateTooltip = function(button)
+		oldUpdateTooltip(button);
+		SM_BActionButton_SetTooltip();
+	end
+end
 
 function SM_ActionButton_SetTooltip()
 	local actionid=ActionButton_GetPagedID(this);
+	local macroname=GetActionText(actionid); --or getglobal(this:GetName().."Name"):GetText();
+	if ( macroname ) then
+		local macro, _, body = GetMacroInfo(GetMacroIndexByName(macroname));
+		
+		-- for supermacros
+		local superfound = SM_ACTION[actionid];
+		if ( superfound ) then
+			macro,_,body=GetSuperMacroInfo(superfound);
+			GameTooltipTextLeft1:SetText(macro);
+			GameTooltip:Show();
+		end
+
+		if ( SM_VARS.macroTip1==1 ) then
+			local actiontype, spell = SM_GetActionSpell(macro, superfound);
+			if ( actiontype=="spell" ) then
+				local id, book = SM_FindSpell(spell);
+				GameTooltip:SetSpell(id, book);
+				local s, r = GetSpellName(id, book);
+				if ( r ) then
+					GameTooltipTextRight1:SetText("|cff00ffff"..r.."|r");
+					GameTooltipTextRight1:Show();
+					GameTooltip:Show();
+				end
+				return;
+			elseif ( actiontype=="item" ) then
+				local id, book = FindItem(spell);
+				if ( book ) then
+					GameTooltip:SetBagItem(id, book);
+				elseif ( id ) then
+					GameTooltip:SetInventoryItem( 'player', id);
+				end
+				return;
+			end
+		end
+		if ( SM_VARS.macroTip2 == 1 ) then
+			-- show macro code
+			if ( not GameTooltipTextLeft1:GetText() ) then return; end
+			body = gsub(body, "\n$", "");
+			GameTooltipTextLeft1:SetText( "|cff00ffff"..macro.."|r");
+			GameTooltipTextLeft2:SetText("|cffffffff"..body.."|r");
+			GameTooltipTextLeft2:Show();
+			GameTooltipTextLeft1:SetWidth(284);
+			GameTooltipTextLeft2:SetWidth(284);
+			GameTooltip:SetWidth(300);
+			GameTooltip:SetHeight( GameTooltipTextLeft1:GetHeight() + GameTooltipTextLeft2:GetHeight() + 23);
+			GameTooltipTextLeft2:SetNonSpaceWrap(true);
+			return;
+		end
+	end
+	-- brighten rank text on all tooltips
+	if ( GameTooltipTextRight1:GetText() ) then
+		local t = GameTooltipTextRight1:GetText();
+		GameTooltipTextRight1:SetText("|cff00ffff"..t.."|r");
+	end
+	-- show crit info for Attack
+	if ( GameTooltipTextLeft1:GetText()=="Attack" ) then
+		id, book = FindSpell("Attack","");
+		GameTooltip:SetSpell(id, book);
+		GameTooltip:Show();
+	end
+end
+
+--fix Error: attempt to index a nil value in function 'ActionButton_GetPagedID'  [Monteo]
+function SM_BActionButton_SetTooltip()
+	local actionid=BActionButton.GetPagedID(this:GetID());
 	local macroname=GetActionText(actionid); --or getglobal(this:GetName().."Name"):GetText();
 	if ( macroname ) then
 		local macro, _, body = GetMacroInfo(GetMacroIndexByName(macroname));
@@ -93,19 +173,17 @@ function GetActionCooldown( actionid )
 			name,icon,body=GetSuperMacroInfo(superfound);
 		end
 
+		local buttonName = this:GetName() or ("BActionButton"..actionid);	-- The part after 'or' is to support Bongos [Fixed by Threewords]
+
 		local macroname, pic;
 		if ( this ) then
-		
-		--fix for Bongos by Luise
-		if this:GetName() then 
-			macroname = getglobal(this:GetName().."Name");
-				if ( macroname ) then
-					macroname:SetText(name);
-				end
-				pic = getglobal(this:GetName().."Icon");
-				if ( pic ) then
-					pic:SetTexture(icon);
-				end
+			macroname=getglobal(buttonName.."Name");
+			if ( macroname ) then
+				macroname:SetText(name);
+			end
+			pic = getglobal(buttonName.."Icon");
+			if ( pic ) then
+				pic:SetTexture(icon);
 			end
 		end
 
@@ -123,10 +201,10 @@ function GetActionCooldown( actionid )
 			local id, book, texture, count = FindItem(spell);
 			if ( count and count>1 and macroname ) then
 				macroname:Hide();
-				getglobal(this:GetName().."Count"):SetText(count);
+				getglobal(buttonName.."Count"):SetText(count);
 			elseif ( macroname ) then
 				macroname:Show();
-				getglobal(this:GetName().."Count"):SetText("");
+				getglobal(buttonName.."Count"):SetText("");
 			end
 			if ( book ) then
 				return GetContainerItemCooldown(id, book);

@@ -12,7 +12,7 @@ if GetLocale() == "ruRU" then
 	NEW_SUPERMACRO = "Новый";
 	DELETE_SUPERMACRO = "Удалить";
 	SUPERMACRO_TITLE = "СуперМакро";
-	SUPERMACRO_BUTTON = "С\nУ\nП\nЕ\nР\n-\nМ\nА\nК\nР\nО";
+	SUPERMACRO_BUTTON = "M\nA\nC\nR\nO\nS";
 	SUPERMACRO_OPTIONS = "SM настройки";
 	SUPERMACRO_NEW_ACCOUNT = "Новый макрос аккаунта";
 	SUPERMACRO_NEW_CHARACTER = "Новый макрос персонажа";
@@ -40,6 +40,41 @@ if GetLocale() == "ruRU" then
 	SUPERMACRO_HELP_LINE5 = "/supermacro macrotip 0-3 - по умолчанию 1"
 	SUPERMACRO_HELP_LINE6 = "0 нормально, 1 показывает заклинание, 2 показывает код макроса, 3 показывает заклинание и/или код"
 	
+	SLASH_SMUSE1 = "/use";
+	SLASH_SMUSE2 = "/smuse";
+	SLASH_SMEQUIP1 = "/equip";
+	SLASH_SMEQUIP2 = "/smequip";
+	SLASH_SMEQUIP3 = "/eq";
+	SLASH_SMEQUIP4 = "/smeq";
+	SLASH_SMEQUIPOFF1 = "/equipoff";
+	SLASH_SMEQUIPOFF2 = "/smequipoff";
+	SLASH_SMEQUIPOFF3 = "/eqoff";
+	SLASH_SMEQUIPOFF4 = "/smeqoff";
+	SLASH_SMUNEQUIP1 = "/unequip";
+	SLASH_SMUNEQUIP2 = "/smunequip";
+	SLASH_SMUNEQUIP3 = "/uneq";
+	SLASH_SMUNEQUIP4 = "/smuneq";
+	SLASH_SMPRINT1 = "/print";
+	SLASH_SMPRINT2 = "/smprint";
+	SLASH_SMPASS1 = "/pass";
+	SLASH_SMPASS2 = "/smpass";
+	SLASH_SMFAIL1 = "/fail";
+	SLASH_SMFAIL2 = "/smfail";
+	SLASH_SMDOORDER1 = "/order";
+	SLASH_SMDOORDER2 = "/smorder";
+	SLASH_SMCHANNEL1 = "/smchan";
+	SLASH_SMCHANNEL2 = "/smchannel";
+	SLASH_SMIN1 = "/in";
+	SLASH_SMIN2 = "/smin";
+	SLASH_SMSHIFT1 = "/shift";
+	SLASH_SMSHIFT2 = "/smshift";
+	SLASH_SMCRAFT1 = "/craft";
+	SLASH_SMCRAFT2 = "/smcraft";
+	SLASH_SMSAYRANDOM1 = "/sayrandom";
+	SLASH_SMSAYRANDOM2 = "/smsayrandom";
+	SLASH_SMCANCELBUFF1 = "/unbuff";
+	SLASH_SMCANCELBUFF2 = "/smunbuff";
+	SLASH_SMRUNSUPER1 = "/smacro";
 	
 	--BINDINGS
 	
@@ -136,7 +171,43 @@ else
 	SUPERMACRO_HELP_LINE4 = "/supermacro printcolor <red> <green> <blue>, each from 0 to 1 to change color used in /print"
 	SUPERMACRO_HELP_LINE5 = "/supermacro macrotip 0-3, 1 default"
 	SUPERMACRO_HELP_LINE6 = "0 is normal, 1 show spells, 2 show macro code, 3 show  spell and/or code"
-
+	
+	SLASH_SMUSE1 = "/use";
+	SLASH_SMUSE2 = "/smuse";
+	SLASH_SMEQUIP1 = "/equip";
+	SLASH_SMEQUIP2 = "/smequip";
+	SLASH_SMEQUIP3 = "/eq";
+	SLASH_SMEQUIP4 = "/smeq";
+	SLASH_SMEQUIPOFF1 = "/equipoff";
+	SLASH_SMEQUIPOFF2 = "/smequipoff";
+	SLASH_SMEQUIPOFF3 = "/eqoff";
+	SLASH_SMEQUIPOFF4 = "/smeqoff";
+	SLASH_SMUNEQUIP1 = "/unequip";
+	SLASH_SMUNEQUIP2 = "/smunequip";
+	SLASH_SMUNEQUIP3 = "/uneq";
+	SLASH_SMUNEQUIP4 = "/smuneq";
+	SLASH_SMPRINT1 = "/print";
+	SLASH_SMPRINT2 = "/smprint";
+	SLASH_SMPASS1 = "/pass";
+	SLASH_SMPASS2 = "/smpass";
+	SLASH_SMFAIL1 = "/fail";
+	SLASH_SMFAIL2 = "/smfail";
+	SLASH_SMDOORDER1 = "/order";
+	SLASH_SMDOORDER2 = "/smorder";
+	SLASH_SMCHANNEL1 = "/smchan";
+	SLASH_SMCHANNEL2 = "/smchannel";
+	SLASH_SMIN1 = "/in";
+	SLASH_SMIN2 = "/smin";
+	SLASH_SMSHIFT1 = "/shift";
+	SLASH_SMSHIFT2 = "/smshift";
+	SLASH_SMCRAFT1 = "/craft";
+	SLASH_SMCRAFT2 = "/smcraft";
+	SLASH_SMSAYRANDOM1 = "/sayrandom";
+	SLASH_SMSAYRANDOM2 = "/smsayrandom";
+	SLASH_SMCANCELBUFF1 = "/unbuff";
+	SLASH_SMCANCELBUFF2 = "/smunbuff";
+	SLASH_SMRUNSUPER1 = "/smacro";
+	
 	--BINDINGS
 	
 	BINDING_HEADER_SUPERMACROHEADER = "SuperMacro";
@@ -192,3 +263,4 @@ else
 	BINDING_NAME_SM_SUPERMACRO9 = "SuperMacro 9";
 	BINDING_NAME_SM_SUPERMACRO10 = "SuperMacro 10";
 end
+

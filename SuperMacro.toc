@@ -9,5 +9,6 @@
 ##..\..\FrameXML\Fonts.xml
 ##..\..\FrameXML\UIPanelTemplates.xml
 ##..\..\FrameXML\ClassTrainerFrameTemplates.xml
+## Version: 1.16a
 SuperMacro.xml
 SuperMacroOptions.xml
