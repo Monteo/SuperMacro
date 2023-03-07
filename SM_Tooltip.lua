@@ -3,7 +3,7 @@
 
 SM_ITEM_PATTERN = "[%w '%-:]+";
 SM_SPELL_PATTERN="[%w'%(%) %-:]+";
-
+--fix Error: attempt to index a nil value in function 'ActionButton_GetPagedID'  [Monteo]
 oldActionButton_SetTooltip=ActionButton_SetTooltip;
 function ActionButton_SetTooltip()
 	oldActionButton_SetTooltip();
@@ -15,6 +15,14 @@ if (BActionButton ~= nil) then
 	BActionButton.UpdateTooltip = function(button)
 		oldUpdateTooltip(button);
 		SM_ActionButton_SetTooltip();
+	end
+end
+
+if (DAB_ActionButton_OnEnter ~= nil) then
+	oldDAB_ActionButton_OnEnter=DAB_ActionButton_OnEnter;
+	DAB_ActionButton_OnEnter = function()
+		oldDAB_ActionButton_OnEnter();
+		SM_ActionButton_SetTooltip(actionid);
 	end
 end
 
@@ -37,12 +45,16 @@ function SM_ActionButton_SetTooltip()
 			if ( actiontype=="spell" ) then
 				local id, book = SM_FindSpell(spell);
 				GameTooltip:SetSpell(id, book);
+			if TheoryCraft_AddTooltipInfo then
+				TheoryCraft_AddTooltipInfo(GameTooltip)
+			else	
 				local s, r = GetSpellName(id, book);
 				if ( r ) then
 					GameTooltipTextRight1:SetText("|cff00ffff"..r.."|r");
 					GameTooltipTextRight1:Show();
 					GameTooltip:Show();
 				end
+			end
 				return;
 			elseif ( actiontype=="item" ) then
 				local id, book = FindItem(spell);
