@@ -2,6 +2,8 @@ TODO
 update readme on how to use "Super" macros
 support DiscordBars, etc.
 
+3.16b bongos is fixed
+
 3.16a 
 Main Menu icon edit
 bongos support improved
