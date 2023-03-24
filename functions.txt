@@ -16,6 +16,7 @@ echo   (see /print)
 /equipoff, /smequipoff, /eqoff, /smeqoff
 Fail(message), /fail   (also see Pass)
 FindBuff(buff [ [, unit], item]), buffed
+SpellReady(spell)
 FindItem(item)
 /in seconds[+] command, SM_IN(seconds, command, repeat)
 lastActionUsed
@@ -124,6 +125,12 @@ Ex. FindBuff("rockbiter",nil,1) -- player's weapon buff; returns "main" or "off"
 Ex. buffed("rockb") -- same as above
 Ex. buffed("gouge", 'target') -- target's buff; returns "debuff", id
 Ex. buffed("perception") -- returns "buff", id
+
+## SpellReady
+See if a specifc spell is off cooldown
+Usage: SpellReady("spell")
+spell is the name of the spell (not case sensitive)
+Ex. SpellReady("Innervate") -- returns true or false
 
 ## FindItem(item)
 Find an item in your container bags or inventory. If found in inventory, returns slot, nil, texture, count. If found in bags, returns bag, slot, texture, total count in all bags. Also works with item links. Alt-click on item to insert item link into macro.
