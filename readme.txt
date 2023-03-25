@@ -1,5 +1,14 @@
-TODO
-update readme on how to use "Super" macros
+3.17.1 added "mouseover" can now be used as a unit identifier in the FindBuff() function
+added SpellReady function. More details in funtions.txt
+Increased the number of buffs counted when looking for a buff/debuff
+
+If you want see tooltips and button text for spell in macros you should add line to top of your macro:
+/run -- CastSpellByName("Spell Name")
+/script -- CastSpellByName("Spell Name")
+/script if nil then CastSpellByName("SPELLNAME"); end
+/run -- cast("Spell Name")
+/script -- cast("Spell Name")
+
 
 3.17 added DiscordBars support and TheoryCraft macro tooltip compatibility.
 

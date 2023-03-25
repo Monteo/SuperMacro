@@ -446,7 +446,7 @@ function FindBuff( obuff, unit, item)
 	if ( my ) then
 		tooltip:SetOwner(UIParent, "ANCHOR_NONE");
 		tooltip:SetInventoryItem( unit, 16);
-		for i=1, 23 do
+		for i=1, 32 do
 			local text = getglobal("SM_TooltipTextLeft"..i):GetText();
 			if ( not text ) then
 				break;
@@ -459,7 +459,7 @@ function FindBuff( obuff, unit, item)
 	elseif ( oy ) then
 		tooltip:SetOwner(UIParent, "ANCHOR_NONE");
 		tooltip:SetInventoryItem( unit, 17);
-		for i=1, 23 do
+		for i=1, 32 do
 			local text = getglobal("SM_TooltipTextLeft"..i):GetText();
 			if ( not text ) then
 				break;
@@ -521,7 +521,7 @@ end
 function CancelBuff(...)
 	for j=1, getn(arg) do
    	local buff = strlower(arg[j]);
-   	for i=0, 24 do
+   	for i=0, 32 do
    		SM_Tooltip:SetOwner(UIParent, "ANCHOR_NONE");
    		SM_Tooltip:SetPlayerBuff(i);
    		local name = SM_TooltipTextLeft1:GetText();

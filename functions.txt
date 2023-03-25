@@ -46,6 +46,14 @@ ViewEventMacros()  (also see RegisterEventMacro)
 ## Alias
 --End table of contents
 
+## If you want see tooltips and button text for spell in macros you should add line to top of your macro:
+
+/run -- CastSpellByName("Spell Name")
+/script -- CastSpellByName("Spell Name")
+/script if nil then CastSpellByName("SPELLNAME"); end
+/run -- cast("Spell Name")
+/script -- cast("Spell Name")
+
 ## CancelBuff(buff [,...]), unbuff, /unbuff, /smunbuff
 Cancel the player's buffs that match the given strings.
 Ex. /script CancelBuff("Demon Skin")
