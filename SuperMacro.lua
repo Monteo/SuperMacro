@@ -40,6 +40,10 @@ SM_AliasFunctions[0]=function (body) return body; end
 
 local oldextend;
 
+
+local function OnDragStart() this:StartMoving() end
+local function OnDragStop() this:StopMovingOrSizing() end
+
 function SuperMacroFrame_OnLoad()
 	PanelTemplates_SetNumTabs(this, 2);
 	SuperMacroFrame.selectedTab = 1;
@@ -57,16 +61,34 @@ function SuperMacroFrame_OnLoad()
 	if ( not Print ) then
 		Print=Printd;
 	end
+
+	SuperMacroFrame:SetMovable(true)
+	SuperMacroFrame:EnableMouse(true)
+	SuperMacroFrame:RegisterForDrag("LeftButton")
+	SuperMacroFrame:SetScript("OnDragStart", OnDragStart)
+	SuperMacroFrame:SetScript("OnDragStop", OnDragStop)
 end
 
 function SuperMacroFrame_OnShow()
 	SuperMacroFrame.extendChanged=nil;
 	SuperMacroFrame_Update();
 	PlaySound("igCharacterInfoOpen");
+
+	SuperMacroFrame:ClearAllPoints()
+	if SuperMacroFrame.savedPoint then
+		SuperMacroFrame:SetPoint("TOPLEFT", nil, "TOPLEFT", SuperMacroFrame.savedPoint.x, SuperMacroFrame.savedPoint.y)
+	else
+		local y = (math.floor(UIParent:GetTop()) - SuperMacroFrame:GetHeight()) / 2
+		SuperMacroFrame:SetPoint("TOPLEFT", nil, "TOPLEFT", 0, -y)
+	end
 end
 
 function SuperMacroFrame_OnHide()
+	SuperMacroFrame.savedPoint = {}
+	_, _, _, SuperMacroFrame.savedPoint.x, SuperMacroFrame.savedPoint.y  = SuperMacroFrame:GetPoint()
+
 	SuperMacroPopupFrame:Hide();
+	SuperMacroOptionsFrame:Hide()
 	SuperMacroFrame_SaveMacro();
 	PlaySound("igCharacterInfoClose");
 	if ( SuperMacroFrame.extendChanged ) then
@@ -381,6 +403,12 @@ function SuperMacroFrame_ShowDetails()
 end
 
 function SuperMacroPopupFrame_OnShow()
+	SuperMacroPopupFrame:ClearAllPoints()
+	if SuperMacroFrame:GetWidth() > 800 then
+		SuperMacroPopupFrame:SetPoint("TOPRIGHT", "SuperMacroFrame", "TOPRIGHT", -60, -10)
+	else
+		SuperMacroPopupFrame:SetPoint("TOPLEFT", "SuperMacroFrame", "TOPRIGHT", -40, -40)
+	end
 	if ( this.mode == "newaccount" or this.mode == "newcharacter" ) then
 		SuperMacroFrameText:Hide();
 		SuperMacroFrameSelectedMacroButtonIcon:SetTexture("");
@@ -406,6 +434,7 @@ function SuperMacroPopupFrame_OnShow()
 end
 
 function SuperMacroPopupFrame_OnHide()
+	PlaySound("igCharacterInfoClose");
 	if ( this.mode == "newaccount" or this.mode == "newcharacter" ) then
 		SuperMacroFrameText:Show();
 		SuperMacroFrameText:SetFocus();
@@ -544,9 +573,9 @@ end
 
 function SuperMacroOptionsButton_OnClick()
 	if ( SuperMacroOptionsFrame:IsVisible() ) then
-		HideUIPanel(SuperMacroOptionsFrame);
+		SuperMacroOptionsFrame:Hide()
 	else
-		ShowUIPanel(SuperMacroOptionsFrame);
+		SuperMacroOptionsFrame:Show()
 	end
 end
 
@@ -615,6 +644,18 @@ function SuperMacroFrame_OnEvent(event)
 		if ( not SM_VARS.tabShown ) then
 			SM_VARS.tabShown = "regular";
 		end
+		if ( not SM_VARS.monoFont ) then
+			SM_VARS.monoFont = 0;
+		end
+		if ( not SM_VARS.windowWidth ) then
+			SM_VARS.windowWidth = 800;
+		end
+		if ( not SM_VARS.windowHeight ) then
+			SM_VARS.windowHeight = 600;
+		end
+		if ( not SM_VARS.editBoxFontSize ) then
+			SM_VARS.editBoxFontSize = 12;
+		end
 		if ( SM_VARS.tabShown=="regular" ) then
 			SuperMacroFrame.selectedTab = 1;
 			PanelTemplates_UpdateTabs(this);
@@ -647,7 +688,7 @@ function SuperMacroFrame_OnEvent(event)
 			-- this messes up newlines, so should not run during RunMacro
 		end
 		-- for any other alias addons, do SM_InsertAliasFunction(ReplaceAlias, -1); inside your mod
-
+		SuperMacroInitFrames()
 	end
 	if ( event=="PLAYER_ENTERING_WORLD" ) then
 		SM_UpdateActionSpell();
