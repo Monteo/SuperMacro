@@ -243,8 +243,7 @@
 				</Backdrop>
 				<Scripts>
 					<OnLoad>
-						this:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b);
-						this:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b);
+						SuperMacroSetDefaultTooltipColor(this)
 						this:SetFrameLevel(0)
 					</OnLoad>
 				</Scripts>
@@ -703,8 +702,7 @@
 				</Backdrop>
 				<Scripts>
 					<OnLoad>
-						this:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b);
-						this:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b);
+						SuperMacroSetDefaultTooltipColor(this)
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -845,9 +843,7 @@
 						</Size>
 						<Scripts>
 							<OnTextChanged>
-								SuperMacroFrame.extendChanged=1;		
-								SuperMacroFrameExtendCharLimitText:SetText(format(TEXT(SUPERMACROFRAME_EXTEND_CHAR_LIMIT), strlen(SuperMacroFrameExtendText:GetText())));
-								SuperMacroHandleEditBox(this)
+								SuperMacroFrameExtendText_OnTextChanged()
 							</OnTextChanged>
 							<OnEscapePressed>
 								this:ClearFocus();
@@ -922,8 +918,7 @@
 				</Layers>
 				<Scripts>
 					<OnLoad>
-						this:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b);
-						this:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b);
+						SuperMacroSetDefaultTooltipColor(this)
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -1320,8 +1315,7 @@ ScrollFrameTemplate_OnMouseWheel(arg1);
 				</Backdrop>
 				<Scripts>
 					<OnLoad>
-						this:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b);
-						this:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b);
+						SuperMacroSetDefaultTooltipColor(this)
 					</OnLoad>
 				</Scripts>
 			</Frame>

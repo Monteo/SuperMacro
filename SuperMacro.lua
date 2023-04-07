@@ -38,9 +38,6 @@ SM_AliasFunctions.low=0;
 SM_AliasFunctions.high=0;
 SM_AliasFunctions[0]=function (body) return body; end
 
-local oldextend;
-
-
 local function OnDragStart() this:StartMoving() end
 local function OnDragStop() this:StopMovingOrSizing() end
 
@@ -70,7 +67,6 @@ function SuperMacroFrame_OnLoad()
 end
 
 function SuperMacroFrame_OnShow()
-	SuperMacroFrame.extendChanged=nil;
 	SuperMacroFrame_Update();
 	PlaySound("igCharacterInfoOpen");
 
@@ -91,17 +87,7 @@ function SuperMacroFrame_OnHide()
 	SuperMacroOptionsFrame:Hide()
 	SuperMacroFrame_SaveMacro();
 	PlaySound("igCharacterInfoClose");
-	if ( SuperMacroFrame.extendChanged ) then
-		SuperMacroSaveExtend();
-	end
-	SuperMacroFrame.extendChanged=nil;
-	-- purge empty extends
-	for m,e in ipairs(SM_EXTEND) do
-		if ( e=="" ) then
-			SM_EXTEND[m]=nil;
-		end
-	end
-	SuperMacroRunScriptExtend();
+	SuperMacroRunAllExtend()
 end
 
 function SuperMacroFrame_SetAccountMacros()
@@ -304,24 +290,15 @@ end
 
 function SuperMacroButton_OnClick( button )
 	local id=this:GetID();
-	if ( SuperMacroFrame.extendChanged and SuperMacroFrame.selectedMacro ) then
-		SuperMacroSaveExtend();
-	end
 	SuperMacroFrame_SaveMacro();
 	SuperMacroFrame_SelectMacro(id);
 	SuperMacroFrame_Update();
 	SuperMacroPopupFrame:Hide();
 	SuperMacroFrameText:ClearFocus();
-	local macro=SuperMacroFrameSelectedMacroName:GetText();
-	local extendText=SM_EXTEND[macro];
-	if ( extendText ) then
-		SuperMacroFrameExtendText:SetText(extendText);
-	else
-		SuperMacroFrameExtendText:SetText("");
-	end
 	if ( button=="RightButton" ) then
 		RunMacro(id);
 	end
+	SuperMacroSelectExtend(SuperMacroFrameSelectedMacroName:GetText())
 end
 
 function SuperMacroSuperButton_OnClick( button )
@@ -346,16 +323,12 @@ end
 
 function SuperMacroNewAccountButton_OnClick()
 	SuperMacroFrame_SaveMacro();
-	SuperMacroSaveExtend();
-	oldextend=nil;
 	SuperMacroPopupFrame.mode = "newaccount";
 	SuperMacroPopupFrame:Show();
 end
 
 function SuperMacroNewCharacterButton_OnClick()
 	SuperMacroFrame_SaveMacro();
-	SuperMacroSaveExtend();
-	oldextend=nil;
 	SuperMacroPopupFrame.mode = "newcharacter";
 	SuperMacroPopupFrame:Show();
 end
@@ -367,16 +340,6 @@ function SuperMacroNewSuperButton_OnClick()
 end
 
 function SuperMacroEditButton_OnClick()
-	if ( SuperMacroFrame.extendChanged ) then
-		SuperMacroSaveExtend();
-	end
-	-- erase old name extend
-	oldextend=SuperMacroFrameExtendText:GetText();
-	local oldmacro=SelectedMacroName();
-	--SM_EXTEND[oldmacro]=nil;
-	if ( not SameMacroName() ) then
-		SuperMacroSaveExtend(oldmacro, 1); -- delete old extend
-	end
 	SuperMacroFrame_SaveMacro();
 	SuperMacroPopupFrame.mode = "edit";
 	SuperMacroPopupFrame.oldname=SuperMacroFrameSelectedMacroName:GetText();
@@ -536,6 +499,12 @@ function SuperMacroPopupOkayButton_OnClick()
 		SuperMacroFrame_SelectSuperMacro(index);
 	elseif ( SuperMacroPopupFrame.mode == "edit" ) then
 		if ( SM_VARS.tabShown=="regular" ) then
+			if SuperMacroPopupFrame.oldname ~= macroname then
+				SuperMacroCopyExtend(SuperMacroPopupFrame.oldname, macroname)
+				if not SameMacroName() then
+					SuperMacroDeleteExtend(SuperMacroPopupFrame.oldname)
+				end
+			end
 			index = EditMacro(SuperMacroFrame.selectedMacro, macroname, SuperMacroPopupFrame.selectedIcon);
 			if ( GetMacroIndexByName(SuperMacroPopupFrame.oldname)==0 ) then
 				SM_UpdateActionSpell(SuperMacroPopupFrame.oldname, "regular", '');
@@ -552,23 +521,9 @@ function SuperMacroPopupOkayButton_OnClick()
 			SuperMacro_UpdateAction(oldsuper, macroname);
 		end
 	end
+	SuperMacroSelectExtend(macroname)
 	SuperMacroPopupFrame:Hide();
 	SuperMacroFrame_Update();
-	
-	-- if edited name, use oldextend
-	if ( oldextend ) then
-		SuperMacroFrameExtendText:SetText(oldextend);
-	elseif ( SameMacroName() ) then
-	-- get extend with same name, else empty
-		local text = SuperMacroGetExtend( GetMacroInfo( SameMacroName(),"name" ) ) ;
-			if ( text ) then
-				SuperMacroFrameExtendText:SetText( text );
-			end
-	else
-		SuperMacroFrameExtendText:SetText("");
-	end
-	SuperMacroSaveExtend();
-	oldextend=nil;
 end
 
 function SuperMacroOptionsButton_OnClick()
@@ -667,8 +622,7 @@ function SuperMacroFrame_OnEvent(event)
 		ToggleSMMinimap();
 		ToggleSMMenu();
 		ToggleSMWordWrap();
-		SuperMacroRunScriptExtend();
-		SuperMacroFrame.extendChanged=nil;
+		SuperMacroInitExtend()
 		SM_ORDERED=SortSuperMacroList();
 		local player=UnitName("player").." of "..GetRealmName();
 		if ( not SM_ACTION_SUPER[player] ) then
@@ -898,64 +852,18 @@ function FindSpell(spell, rank)
 	return;
 end
 
-function SuperMacroSaveExtendButton_OnClick()
-	SuperMacroSaveExtend();
-	SuperMacroRunScriptExtend();
-end
-
-function SuperMacroDeleteExtendButton_OnClick()
-	SuperMacroSaveExtend(SelectedMacroName(),1);
-	SuperMacroRunScriptExtend();
-end
-
-function SuperMacroSaveExtend(macro, delete)
-	local text=SuperMacroFrameExtendText:GetText();
-	if ( delete ) then text = nil; end
-	if ( not macro ) then
-		macro = SelectedMacroName();
-	end
-	if ( macro ) then
-    	if ( text and text~="" ) then
-		SM_EXTEND[macro]=text;
-	else
-		SM_EXTEND[macro]=nil;
-			if ( macro == SelectedMacroName() ) then
-			SuperMacroFrameExtendText:SetText('');
-			end
-	end
-	end
-	SuperMacroFrame.extendChanged=nil;
-	SuperMacroFrameExtendText:ClearFocus();
-end
-
-function SuperMacroGetExtend(macro)
-	return SM_EXTEND[macro];
-end
-
-function SuperMacroRunScriptExtend()
-	for m,e in pairs(SM_EXTEND) do
-		if ( e ) then
-			RunScript(e);
-		end
-	end
-end
 
 function SuperMacroDeleteButton_OnClick()
 -- check other macros with same name to see if save extend
 	local macro=GetMacroInfo(SuperMacroFrame.selectedMacro,"name");
-	if ( SameMacroName()==false ) then
-		SuperMacroSaveExtend(macro,1); -- delete extend
+	if not SameMacroName() then
+		SuperMacroDeleteExtend(macro); -- delete extend
 	end
 	DeleteMacro(SuperMacroFrame.selectedMacro);
 	SuperMacroFrame_OnLoad();
 	SuperMacroFrame_Update();
-	local name = GetMacroInfo(1,"name");
-	oldextend = SM_EXTEND[name];
-	if ( oldextend ) then
-		SuperMacroFrameExtendText:SetText(oldextend);
-	end
-	oldextend = nil;
 	SuperMacroFrameText:ClearFocus();
+	SuperMacroSelectExtend(GetMacroInfo(1,"name"))
 end
 
 function SuperMacroDeleteSuperButton_OnClick()
