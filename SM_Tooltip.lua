@@ -3,18 +3,28 @@
 
 SM_ITEM_PATTERN = "[%w '%-:]+";
 SM_SPELL_PATTERN="[%w'%(%) %-:]+";
---fix Error: attempt to index a nil value in function 'ActionButton_GetPagedID'  [Monteo]
+
 oldActionButton_SetTooltip=ActionButton_SetTooltip;
 function ActionButton_SetTooltip()
 	oldActionButton_SetTooltip();
-	SM_ActionButton_SetTooltip();
+	local actionid=ActionButton_GetPagedID(this);
+	SM_ActionButton_SetTooltip(actionid);
 end
+--fix Error: attempt to index a nil value in function 'ActionButton_GetPagedID'  [Monteo]
+oldBActionButton_SetTooltip=BActionButton_SetTooltip;
+function BActionButton_SetTooltip()
+	oldBActionButton_SetTooltip();
+	local actionid=BActionButton.GetPagedID(this:GetID());
+	SM_ActionButton_SetTooltip(actionid);
+end
+
 -- Hooking into tooltip caller of Bongos [Fixed by Threewords]
 if (BActionButton ~= nil) then
 	oldUpdateTooltip=BActionButton.UpdateTooltip;
 	BActionButton.UpdateTooltip = function(button)
 		oldUpdateTooltip(button);
-		SM_ActionButton_SetTooltip();
+		local actionid=BActionButton.GetPagedID(this:GetID());
+		SM_ActionButton_SetTooltip(actionid);
 	end
 end
 
@@ -22,12 +32,13 @@ if (DAB_ActionButton_OnEnter ~= nil) then
 	oldDAB_ActionButton_OnEnter=DAB_ActionButton_OnEnter;
 	DAB_ActionButton_OnEnter = function()
 		oldDAB_ActionButton_OnEnter();
+		local actionid = this:GetActionID();
 		SM_ActionButton_SetTooltip(actionid);
 	end
 end
 
-function SM_ActionButton_SetTooltip()
-	local actionid=ActionButton_GetPagedID(this);
+function SM_ActionButton_SetTooltip(actionid)
+	--local actionid=ActionButton_GetPagedID(this);
 	local macroname=GetActionText(actionid); --or getglobal(this:GetName().."Name"):GetText();
 	if ( macroname ) then
 		local macro, _, body = GetMacroInfo(GetMacroIndexByName(macroname));
