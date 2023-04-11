@@ -16,6 +16,21 @@ local function AddCustomHandlerForEditBox(editBox)
     editBox:SetScript("OnTabPressed", function()
         this:Insert("  ")
     end)
+
+    local scrollFrame = editBox:GetParent()
+
+    -- Add line show
+    editBox.textLineNumber = scrollFrame:CreateFontString("Status", "LOW", "GameFontHighlightSmall")
+    editBox.textLineNumber:SetPoint("BOTTOMLEFT", scrollFrame, "BOTTOMRIGHT", -50, -16)
+    editBox.textLineNumber:SetJustifyH("LEFT")
+
+    editBox:SetScript("OnCursorChanged", function()
+        local x = arg1
+        local y = arg2
+        local lineHeight = arg4
+        local lineNumber = math.abs(math.floor(y / lineHeight + 0.5)) + 1
+    this.textLineNumber:SetText(string.format("Line: %4d", lineNumber))
+    end)
 end
 
 -- Post load initialization for SuperMacro frames
