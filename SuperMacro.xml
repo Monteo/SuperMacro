@@ -2,6 +2,7 @@
 ..\FrameXML\UI.xsd">
 	<Script file="SuperMacro.lua"/>
 	<Script file="SM_Common.lua"/>
+	<Script file="SM_MacroExtend.lua"/>
 	<Script file="SM_Super.lua"/>
 	<Script file="SM_ItemLink.lua"/>
 	<Script file="SM_Slash.lua"/>
