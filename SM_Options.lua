@@ -7,11 +7,30 @@ SuperMacroOptionsFrameCheckButtons["SM_REPLACE_ICON"] = { index = 5, var = "repl
 SuperMacroOptionsFrameCheckButtons["SM_CHECK_COOLDOWN"] = { index = 6, var = "checkCooldown"};
 SuperMacroOptionsFrameCheckButtons["SM_SHOW_MENU"] = { index = 7, var = "showMenu"};
 SuperMacroOptionsFrameCheckButtons["SM_WORDWRAP"] = { index = 8, var = "wordWrap"};
+SuperMacroOptionsFrameCheckButtons["SM_MONO_FONT"] = { index = 9, var = "monoFont"};
 SuperMacroOptionsFrameColorSwatches = { };
 SuperMacroOptionsFrameColorSwatches["SM_PRINT_COLOR"] = { index = 1, var = "printColor", exampleText=SM_PRINT_COLOR_EXAMPLE_TEXT};
+SuperMacroOptionsFrameEditBoxes = { };
+SuperMacroOptionsFrameEditBoxes["SM_WINDOW_WIDTH"] = { index = 1, var = "windowWidth"};
+SuperMacroOptionsFrameEditBoxes["SM_WINDOW_HEIGHT"] = { index = 2, var = "windowHeight"};
+SuperMacroOptionsFrameEditBoxes["SM_EDITBOX_FONT_SIZE"] = { index = 3, var = "editBoxFontSize"};
 
 function SuperMacroOptionsFrame_OnShow()
-  for k, v in SuperMacroOptionsFrameCheckButtons do
+	SuperMacroOptionsFrame:ClearAllPoints()
+	SuperMacroOptionsFrame:SetPoint("CENTER", nil, "CENTER", 0, 0)
+
+	SuperMacroFrameText:ClearFocus();
+	SuperMacroFrameSuperText:ClearFocus();
+
+	PlaySound("igMainMenuOption")
+
+	-- Disable Buttons
+	SuperMacroEditButton:Disable();
+	SuperMacroDeleteButton:Disable();
+	SuperMacroNewAccountButton:Disable();
+	SuperMacroNewCharacterButton:Disable();
+
+  	for k, v in SuperMacroOptionsFrameCheckButtons do
   		local button = getglobal("SuperMacroOptionsFrameCheckButton"..v.index);
   		local string = getglobal("SuperMacroOptionsFrameCheckButton"..v.index.."Text");
   		local checked;
@@ -36,6 +55,23 @@ function SuperMacroOptionsFrame_OnShow()
 			example:SetTextColor(button.r, button.g, button.b);
 		end
 	end
+
+	for k, v in SuperMacroOptionsFrameEditBoxes do
+  		local button = getglobal("SuperMacroOptionsFrameEditBox"..v.index);
+  		local string = getglobal("SuperMacroOptionsFrameEditBox"..v.index.."Text");
+  		local text = SM_VARS[v.var];
+  		button:SetText(text);
+  		string:SetText(TEXT(getglobal(k)));
+  	end
+end
+
+function SuperMacroOptionsFrame_OnHide()
+	PlaySound("igMainMenuOptionCheckBoxOff")
+	SuperMacroEditButton:Enable();
+	SuperMacroDeleteButton:Enable();
+	SuperMacroNewAccountButton:Enable();
+	SuperMacroNewCharacterButton:Enable();
+	SuperMacroUpdateConfig()
 end
 
 function SuperMacroOptionsFrameColorSwatch_OnLoad()
@@ -44,16 +80,18 @@ end
 function SuperMacroOptions_OpenColorPicker(this)
 	ColorPickerFrame.func = function() 
 		SM_VARS[this.var].r, SM_VARS[this.var].g, SM_VARS[this.var].b = ColorPickerFrame:GetColorRGB();
-		SuperMacroOptionsFrame_OnShow();
+		SuperMacroOptionsFrame:Hide();
 	end
 	ColorPickerFrame.hasOpacity = this.hasOpacity;
-	ColorPickerFrame.opacityFunc = this.opacityFunc;
+	ColorPickerFrame.opacityFunc = function ()
+		SuperMacroOptionsFrame:Show()
+	end
 	ColorPickerFrame.opacity = this.opacity;
 	ColorPickerFrame:SetColorRGB(this.r, this.g, this.b);
 	ColorPickerFrame.previousValues = {r = this.r, g = this.g, b = this.b, opacity = this.opacity};
 	ColorPickerFrame.cancelFunc = function()
 		SM_VARS[this.var].r, SM_VARS[this.var].g, SM_VARS[this.var].b = ColorPickerFrame.previousValues.r, ColorPickerFrame.previousValues.g, ColorPickerFrame.previousValues.b;
-		SuperMacroOptionsFrame_OnShow();
+		SuperMacroOptionsFrame:Show()
 	end
 	ShowUIPanel(ColorPickerFrame);
 end

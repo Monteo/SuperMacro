@@ -1,6 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 	<Script file="SuperMacro.lua"/>
+	<Script file="SM_Common.lua"/>
+	<Script file="SM_MacroExtend.lua"/>
 	<Script file="SM_Super.lua"/>
 	<Script file="SM_ItemLink.lua"/>
 	<Script file="SM_Slash.lua"/>
@@ -146,12 +148,12 @@
 			<Layer level="BACKGROUND">
 				<Texture name="SuperMacroFramePortrait" file="Interface\Icons\Ability_Ambush">
 					<Size>
-						<AbsDimension x="60" y="60"/>
+						<AbsDimension x="55" y="55"/>
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset>
-								<AbsDimension x="7" y="-6"/>
+								<AbsDimension x="17" y="-15"/>
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -162,64 +164,6 @@
 				</Texture>
 			</Layer>
 			<Layer level="BORDER">
-				<Texture file="Interface\PaperDollInfoFrame\UI-Character-General-TopLeft">
-					<Size>
-						<AbsDimension x="256" y="256"/>
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT"/>
-					</Anchors>
-				</Texture>
-				<Texture file="Interface\PaperDollInfoFrame\UI-Character-General-TopLeft">
-					<Size>
-						<AbsDimension x="206" y="256"/>
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="256" y="0"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-					<TexCoords left="0.30" right="1.0" top="0" bottom="1.0"/>
-				</Texture>
-				<Texture file="Interface\PaperDollInfoFrame\UI-Character-General-TopRight">
-					<Size>
-						<AbsDimension x="128" y="256"/>
-					</Size>
-					<Anchors>
-						<Anchor point="TOPRIGHT"/>
-					</Anchors>
-				</Texture>
-				<Texture file="Interface\MacroFrame\MacroFrame-BotLeft">
-					<Size>
-						<AbsDimension x="256" y="256"/>
-					</Size>
-					<Anchors>
-						<Anchor point="BOTTOMLEFT"/>
-					</Anchors>
-				</Texture>
-				<Texture file="Interface\MacroFrame\MacroFrame-BotLeft">
-					<Size>
-						<AbsDimension x="206" y="256"/>
-					</Size>
-					<Anchors>
-						<Anchor point="BOTTOMLEFT">
-							<Offset>
-								<AbsDimension x="256" y="0"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-					<TexCoords left="0.30" right="0.93" top="0" bottom="1.0"/>
-				</Texture>
-				<Texture file="Interface\MacroFrame\MacroFrame-BotRight">
-					<Size>
-						<AbsDimension x="128" y="256"/>
-					</Size>
-					<Anchors>
-						<Anchor point="BOTTOMRIGHT"/>
-					</Anchors>
-				</Texture>
 				<FontString name="SuperMacroFrameTitle" inherits="GameFontNormal" text="SUPERMACRO_TITLE">
 					<Anchors>
 						<Anchor point="TOP" relativeTo="SuperMacroFrame">
@@ -242,32 +186,6 @@
 							</Offset>
 						</Anchor>
 					</Anchors>
-				</Texture>
-				<Texture name="SuperMacroHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
-					<Size>
-						<AbsDimension x="460" y="16"/>
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT">
-							<Offset>
-								<AbsDimension x="15" y="-220"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-					<TexCoords left="0" right="1.0" top="0" bottom="0.25"/>
-				</Texture>
-				<Texture file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
-					<Size>
-						<AbsDimension x="75" y="16"/>
-					</Size>
-					<Anchors>
-						<Anchor point="LEFT" relativeTo="SuperMacroHorizontalBarLeft" relativePoint="RIGHT">
-							<Offset>
-								<AbsDimension x="0" y="0"/>
-							</Offset>
-						</Anchor>
-					</Anchors>
-					<TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
 				</Texture>
 				<FontString name="SuperMacroFrameSelectedMacroName" inherits="GameFontNormalLarge" justifyH="LEFT">
 					<Size>
@@ -302,6 +220,35 @@
 			</Layer>
 		</Layers>
 		<Frames>
+			<Frame name="SuperMacroFrameMainBackground">
+				<Size>
+					<AbsDimension x="555" y="437"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativeTo="SuperMacroFrame" relativePoint="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-32" y="72"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="16"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="5" right="5" top="5" bottom="5"/>
+					</BackgroundInsets>
+				</Backdrop>
+				<Scripts>
+					<OnLoad>
+						SuperMacroSetDefaultTooltipColor(this)
+						this:SetFrameLevel(0)
+					</OnLoad>
+				</Scripts>
+			</Frame>
 			<Frame name="SuperMacroFrameRegularFrame" setAllPoints="true">
 				<Layers>
 			<Layer level="OVERLAY">
@@ -692,7 +639,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SuperMacroFrameSelectedMacroBackground" relativePoint="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="11" y="0"/>
+							<AbsDimension x="9" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -708,16 +655,7 @@
 									SuperMacroPopupFrame:Hide();
 								end
 								SuperMacroFrameCharLimitText:SetText(format(TEXT(MACROFRAME_CHAR_LIMIT), strlen(SuperMacroFrameText:GetText())));
-
-								local scrollBar = getglobal(this:GetParent():GetName().."ScrollBar")
-								this:GetParent():UpdateScrollChildRect();
-								local min;
-								local max;
-								min, max = scrollBar:GetMinMaxValues();
-								if ( max > 0 and (this.max ~= max) ) then
-									this.max = max;
-									scrollBar:SetValue(max);
-								end
+								SuperMacroHandleEditBox(this)
 							</OnTextChanged>
 							<OnEscapePressed>
 								SuperMacroFrame_SaveMacro();
@@ -746,9 +684,9 @@
 					<AbsDimension x="285" y="112"/>
 				</Size>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="SuperMacroFrame">
+					<Anchor point="TOPLEFT" relativeTo="SuperMacroFrameScrollFrame" relativePoint="TOPLEFT">
 						<Offset>
-							<AbsDimension x="18" y="-285"/>
+							<AbsDimension x="-6" y="6"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -765,8 +703,7 @@
 				</Backdrop>
 				<Scripts>
 					<OnLoad>
-						this:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b);
-						this:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b);
+						SuperMacroSetDefaultTooltipColor(this)
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -804,14 +741,31 @@
 					</OnClick>
 				</Scripts>
 			</Button>
+			<Button name="SuperMacroExitButton" inherits="UIPanelButtonTemplate" text="EXIT">
+				<Size>
+					<AbsDimension x="80" y="22"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativeTo="SuperMacroFrame" relativePoint="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-36" y="79"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						HideUIPanel(SuperMacroFrame);
+					</OnClick>
+				</Scripts>
+			</Button>
 			<Button name="SuperMacroSaveExtendButton" inherits="UIPanelButtonTemplate" text="SAVE_EXTEND">
 				<Size>
 					<AbsDimension x="100" y="22"/>
 				</Size>
 				<Anchors>
-					<Anchor point="CENTER" relativeTo="SuperMacroFrame" relativePoint="TOPRIGHT">
+					<Anchor point="BOTTOMRIGHT" relativeTo="SuperMacroExitButton" relativePoint="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="-170" y="-422"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -826,9 +780,9 @@
 					<AbsDimension x="100" y="22"/>
 				</Size>
 				<Anchors>
-					<Anchor point="CENTER" relativeTo="SuperMacroFrame" relativePoint="TOPRIGHT">
+					<Anchor point="BOTTOMRIGHT" relativeTo="SuperMacroSaveExtendButton" relativePoint="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="-267" y="-422"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -877,9 +831,9 @@
 					<AbsDimension x="209" y="138"/>
 				</Size>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="SuperMacroFrame">
+					<Anchor point="BOTTOMLEFT" relativeTo="SuperMacroFrameScrollFrame" relativePoint="BOTTOMRIGHT">
 						<Offset>
-							<AbsDimension x="308" y="-252"/>
+							<AbsDimension x="40" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -890,17 +844,7 @@
 						</Size>
 						<Scripts>
 							<OnTextChanged>
-								SuperMacroFrame.extendChanged=1;		
-								SuperMacroFrameExtendCharLimitText:SetText(format(TEXT(SUPERMACROFRAME_EXTEND_CHAR_LIMIT), strlen(SuperMacroFrameExtendText:GetText())));
-								local scrollBar = getglobal(this:GetParent():GetName().."ScrollBar")
-								this:GetParent():UpdateScrollChildRect();
-								local min;
-								local max;
-								min, max = scrollBar:GetMinMaxValues();
-								if ( max > 0 and (this.max ~= max) ) then
-									this.max = max;
-									scrollBar:SetValue(max);
-								end
+								SuperMacroFrameExtendText_OnTextChanged()
 							</OnTextChanged>
 							<OnEscapePressed>
 								this:ClearFocus();
@@ -934,9 +878,9 @@
 					<AbsDimension x="245" y="150"/>
 				</Size>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="SuperMacroFrame">
+					<Anchor point="BOTTOMRIGHT" relativeTo="SuperMacroFrameExtendScrollFrame" relativePoint="BOTTOMRIGHT">
 						<Offset>
-							<AbsDimension x="300" y="-247"/>
+							<AbsDimension x="27" y="-6"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -975,8 +919,7 @@
 				</Layers>
 				<Scripts>
 					<OnLoad>
-						this:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b);
-						this:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b);
+						SuperMacroSetDefaultTooltipColor(this)
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -1321,7 +1264,7 @@ ScrollFrameTemplate_OnMouseWheel(arg1);
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="SuperMacroFrameSelectedMacroBackground" relativePoint="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="11" y="0"/>
+							<AbsDimension x="9" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1337,15 +1280,7 @@ ScrollFrameTemplate_OnMouseWheel(arg1);
 									SuperMacroPopupFrame:Hide();
 								end
 								SuperMacroFrameSuperCharLimitText:SetText(format(TEXT(SUPERMACROFRAME_SUPER_CHAR_LIMIT), strlen(SuperMacroFrameSuperText:GetText())));
-								local scrollBar = getglobal(this:GetParent():GetName().."ScrollBar")
-								this:GetParent():UpdateScrollChildRect();
-								local min;
-								local max;
-								min, max = scrollBar:GetMinMaxValues();
-								if ( max > 0 and (this.max ~= max) ) then
-									this.max = max;
-									scrollBar:SetValue(max);
-								end
+								SuperMacroHandleEditBox(this)
 								SuperMacroFrame_SaveSuperMacro();
 							</OnTextChanged>
 							<OnEscapePressed>
@@ -1381,19 +1316,35 @@ ScrollFrameTemplate_OnMouseWheel(arg1);
 				</Backdrop>
 				<Scripts>
 					<OnLoad>
-						this:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b);
-						this:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b);
+						SuperMacroSetDefaultTooltipColor(this)
 					</OnLoad>
 				</Scripts>
 			</Frame>
+			<Button name="SuperMacroNewSuperButton" inherits="UIPanelButtonTemplate" text="NEW_SUPERMACRO">
+				<Size>
+					<AbsDimension x="100" y="22"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativeTo="SuperMacroFrame" relativePoint="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-120" y="79"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SuperMacroNewSuperButton_OnClick();
+					</OnClick>
+				</Scripts>
+			</Button>
 			<Button name="SuperMacroSaveSuperButton" inherits="UIPanelButtonTemplate" text="SAVE_SUPERMACRO">
 				<Size>
 					<AbsDimension x="100" y="22"/>
 				</Size>
 				<Anchors>
-					<Anchor point="CENTER" relativeTo="SuperMacroFrame" relativePoint="TOPRIGHT">
+					<Anchor point="TOPRIGHT" relativeTo="SuperMacroNewSuperButton" relativePoint="TOPLEFT">
 						<Offset>
-							<AbsDimension x="-270" y="-422"/>
+							<AbsDimension x="3" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -1408,32 +1359,15 @@ ScrollFrameTemplate_OnMouseWheel(arg1);
 					<AbsDimension x="100" y="22"/>
 				</Size>
 				<Anchors>
-					<Anchor point="CENTER" relativeTo="SuperMacroFrame" relativePoint="TOPRIGHT">
+					<Anchor point="TOPRIGHT" relativeTo="SuperMacroSaveSuperButton" relativePoint="TOPLEFT">
 						<Offset>
-							<AbsDimension x="-370" y="-422"/>
+							<AbsDimension x="4" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
 						SuperMacroDeleteSuperButton_OnClick();
-					</OnClick>
-				</Scripts>
-			</Button>
-			<Button name="SuperMacroNewSuperButton" inherits="UIPanelButtonTemplate" text="NEW_SUPERMACRO">
-				<Size>
-					<AbsDimension x="100" y="22"/>
-				</Size>
-				<Anchors>
-					<Anchor point="CENTER" relativeTo="SuperMacroFrame" relativePoint="TOPRIGHT">
-						<Offset>
-							<AbsDimension x="-170" y="-422"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						SuperMacroNewSuperButton_OnClick();
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -1470,23 +1404,6 @@ ScrollFrameTemplate_OnMouseWheel(arg1);
 				<Scripts>
 					<OnClick>
 						SuperMacroOptionsButton_OnClick();
-					</OnClick>
-				</Scripts>
-			</Button>
-			<Button name="SuperMacroExitButton" inherits="UIPanelButtonTemplate" text="EXIT">
-				<Size>
-					<AbsDimension x="80" y="22"/>
-				</Size>
-				<Anchors>
-					<Anchor point="CENTER" relativeTo="SuperMacroFrame" relativePoint="TOPRIGHT">
-						<Offset>
-							<AbsDimension x="-80" y="-422"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						HideUIPanel(this:GetParent());
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -1552,7 +1469,7 @@ ScrollFrameTemplate_OnMouseWheel(arg1);
 			</OnMouseWheel>
 		</Scripts>
 	</Frame>
-	<Frame name="SuperMacroPopupFrame" toplevel="true" parent="UIParent" movable="true" enableMouse="true" hidden="true">
+	<Frame name="SuperMacroPopupFrame" frameStrata="TOOLTIP" toplevel="true" parent="UIParent" movable="true" enableMouse="true" hidden="true">
 		<Size>
 			<AbsDimension x="297" y="378"/>
 		</Size>

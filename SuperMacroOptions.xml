@@ -1,9 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 	<Script file="SM_Options.lua"/>
+	<Script file="SM_Common.lua"/>
 	<CheckButton name="SMOptionsCheckButtonTemplate" virtual="true">
 		<Size>
-			<AbsDimension x="32" y="32"/>
+			<AbsDimension x="25" y="25"/>
 		</Size>
 		<Layers>
 			<Layer level="ARTWORK">
@@ -29,7 +30,65 @@
 			</OnLeave>
 		</Scripts>
 	</CheckButton>
-	<Frame name="SuperMacroOptionsFrame" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true">
+	<EditBox name="SMOptionsEditBoxTemplate" letters="4" autoFocus="true" historyLines="0" virtual="true">
+		<Size>
+			<AbsDimension x="30" y="25"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentNameLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
+					<Size>
+						<AbsDimension x="16" y="29"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="-11" y="-3"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<TexCoords left="0" right="0.09375" top="0" bottom="1.0"/>
+				</Texture>
+				<Texture name="$parentNameMiddle" file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
+					<Size>
+						<AbsDimension x="20" y="29"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentNameLeft" relativePoint="RIGHT"/>
+					</Anchors>
+					<TexCoords left="0.09375" right="0.90625" top="0" bottom="1.0"/>
+				</Texture>
+				<Texture name="$parentNameRight" file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
+					<Size>
+						<AbsDimension x="12" y="29"/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentNameMiddle" relativePoint="RIGHT"/>
+					</Anchors>
+					<TexCoords left="0.90625" right="1.0" top="0" bottom="1.0"/>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString name="$parentText" inherits="GameFontBlack">
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT">
+							<Offset>
+								<AbsDimension x="7" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnEscapePressed>
+				HideUIPanel(SuperMacroOptionsFrame)
+				this:ClearFocus()
+			</OnEscapePressed>
+		</Scripts>
+		<FontString inherits="ChatFontNormal"/>
+	</EditBox>
+	<Frame name="SuperMacroOptionsFrame" frameStrata="TOOLTIP" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true">
 		<Size>
 			<AbsDimension x="384" y="512"/>
 		</Size>
@@ -148,7 +207,7 @@
 				<Anchors>
 					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton1" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="-3"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -162,7 +221,7 @@
 				<Anchors>
 					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton2" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="-3"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -177,7 +236,7 @@
 				<Anchors>
 					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton3" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="-3"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -192,7 +251,7 @@
 				<Anchors>
 					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton4" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="-3"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -206,7 +265,7 @@
 				<Anchors>
 					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton5" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="-3"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -220,7 +279,7 @@
 				<Anchors>
 					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton6" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="-3"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -235,7 +294,7 @@
 				<Anchors>
 					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton7" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="-3"/>
+							<AbsDimension x="0" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -246,14 +305,74 @@
 					</OnClick>
 				</Scripts>
 			</CheckButton>
+			<CheckButton name="SuperMacroOptionsFrameCheckButton9" inherits="SMOptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton8" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SM_VARS.monoFont = this:GetChecked() and 1 or 0;
+						SuperMacroUpdateConfig()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<EditBox name="SuperMacroOptionsFrameEditBox1" inherits="SMOptionsEditBoxTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton9" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="-12" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnTextChanged>
+						SM_VARS.windowWidth = this:GetNumber()
+						SuperMacroUpdateConfig()
+					</OnTextChanged>
+				</Scripts>
+			</EditBox>
+			<EditBox name="SuperMacroOptionsFrameEditBox2" inherits="SMOptionsEditBoxTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameEditBox1" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnTextChanged>
+						SM_VARS.windowHeight = this:GetNumber()
+						SuperMacroUpdateConfig()
+					</OnTextChanged>
+				</Scripts>
+			</EditBox>
+			<EditBox name="SuperMacroOptionsFrameEditBox3" inherits="SMOptionsEditBoxTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameEditBox2" relativePoint="BOTTOM">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnTextChanged>
+						SM_VARS.editBoxFontSize = this:GetNumber()
+						SuperMacroUpdateConfig()
+					</OnTextChanged>
+				</Scripts>
+			</EditBox>
 			<Button name="$parentColorSwatch1">
 				<Size>
 					<AbsDimension x="32" y="32"/>
 				</Size>
 				<Anchors>
-					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameCheckButton8" relativePoint="BOTTOM">
+					<Anchor point="TOP" relativeTo="SuperMacroOptionsFrameEditBox3" relativePoint="BOTTOM">
 						<Offset>
-							<AbsDimension x="0" y="-3"/>
+							<AbsDimension x="5" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -311,6 +430,9 @@
 			<OnShow>
 				SuperMacroOptionsFrame_OnShow();
 			</OnShow>
+			<OnHide>
+				SuperMacroOptionsFrame_OnHide();
+			</OnHide>
 		</Scripts>
 	</Frame>
 </Ui>

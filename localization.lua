@@ -29,6 +29,10 @@ if GetLocale() == "ruRU" then
 	SM_CHECK_COOLDOWN = "Авто контроль перезарядки для действий";
 	SM_SHOW_MENU = "Показать кнопку меню";
 	SM_WORDWRAP = "Переносить длинные предложения";
+	SM_MONO_FONT = "Использовать монохромный шрифт для окна скриптов";
+	SM_WINDOW_HEIGHT = "Высота основного окна"
+	SM_WINDOW_WIDTH = "Ширина основного окна"
+	SM_EDITBOX_FONT_SIZE = "Размер шрифта для окна скриптов"
 	
 	--SLASH
 	
@@ -161,6 +165,10 @@ else
 	SM_CHECK_COOLDOWN = "Auto-check cooldown for actions";
 	SM_SHOW_MENU = "Show menu button";
 	SM_WORDWRAP = "Wrap long sentences";
+	SM_MONO_FONT = "Use monospaced font for script editbox";
+	SM_WINDOW_HEIGHT = "Main window height"
+	SM_WINDOW_WIDTH = "Main window width"
+	SM_EDITBOX_FONT_SIZE = "Script editbox text font size"
 	
 	--SLASH
 	
