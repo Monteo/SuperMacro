@@ -1,3 +1,15 @@
+
+3.18 new improved user interface by Horu:
+Add option to change macros window size (removed old background textures)
+Add option to change window script font size
+Add monospaced font
+Make macros window movable
+Fix bug: new line on the end of editbox
+Add tabulation handler for editboxes
+Show current line number on editbox panel
+Fix bug: extend script can be removed on macros renaming
+Fix bugs with renaming wow native macros and macros that have the same name.
+
 3.17.1 added "mouseover" can now be used as a unit identifier in the FindBuff() function
 added SpellReady function. More details in funtions.txt
 Increased the number of buffs counted when looking for a buff/debuff
