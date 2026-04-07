@@ -1,3 +1,23 @@
+3.18.1
+Added new smart targeting and casting functions in SM_Extend.lua:
+- MyTargetMF(spellname): Smart buff/heal function with mouseover priority.
+  * If mouseover is a friendly unit -> casts spell on it (if buff missing) and returns to original target.
+  * If no mouseover but current target is friendly -> checks buff. If missing OR present, casts spell (allows refreshing buffs). Target remains unchanged.
+  * If no valid friendly target -> casts on player.
+  * Example:   /script MyTargetMF("Rejuvenation")
+			   /script MyTargetMF("Unending Breath")
+
+- MouseOver(spellname): Casts spell on mouseover target (friend or foe) with automatic target return.
+  * Supports items: "trinket1", "trinket2", "headslot".
+  * Perfect for quick CC (Fear, Banish) or healing without losing main target.
+  * Example: /script MouseOver("Fear")
+			 /script MouseOver("Shoot")
+
+- MyTargetMV(): Selects nearest living enemy with mouseover priority. Ignores dead/friendly units.
+	* Example: /script MyTargetMV() if not buffed("Immolate", "target") then CastSpellByName("Immolate") else CastSpellByName("Conflagrate") end
+			
+Optimizations:
+- FindBuff() now fully supports "mouseover" unit parameter.
 
 3.18 new improved user interface by Horu:
 Add option to change macros window size (removed old background textures)
