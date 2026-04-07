@@ -436,11 +436,6 @@ function FindBuff( obuff, unit, item)
 	local textleft1=getglobal(tooltip:GetName().."TextLeft1");
 	if ( not unit ) then
 		unit ='player';
-	elseif ( unit == "mouseover" ) then
-		local frame = GetMouseFocus()
-		if ( frame.label and frame.id ) then
-			unit = frame.label .. frame.id
-		end
 	end
 	local my, me, mc, oy, oe, oc = GetWeaponEnchantInfo();
 	if ( my ) then
@@ -503,6 +498,29 @@ function FindBuff( obuff, unit, item)
 			break;
 		end
 		--c = b;
+	end
+	tooltip:Hide();
+end
+
+function FindDebuff( odebuff, unit)
+	local debuff=strlower(odebuff);
+	local tooltip=SM_Tooltip;
+	local textleft1=getglobal(tooltip:GetName().."TextLeft1");
+	if ( not unit ) then
+		unit ='player';
+	end
+	local c=nil;
+	for i=1, 16 do
+		tooltip:SetOwner(UIParent, "ANCHOR_NONE");
+		tooltip:SetUnitDebuff(unit, i);
+		local b = textleft1:GetText();
+		tooltip:Hide();
+		if ( b and strfind(strlower(b), debuff) ) then
+			return i, b;
+		elseif ( c==b) then
+			break;
+		end
+		c = b;
 	end
 	tooltip:Hide();
 end
@@ -694,6 +712,7 @@ stopcast = SpellStopCasting;
 echo = SM_print;
 send = SendChatMessage;
 buffed = FindBuff;
+debuffed = FindDebuff;
 unbuff = CancelBuff;
 pickup = SM_Pickup;
 
