@@ -436,6 +436,11 @@ function FindBuff( obuff, unit, item)
 	local textleft1=getglobal(tooltip:GetName().."TextLeft1");
 	if ( not unit ) then
 		unit ='player';
+	elseif ( unit == "mouseover" ) then
+		local frame = GetMouseFocus()
+		if ( frame.label and frame.id ) then
+			unit = frame.label .. frame.id
+		end
 	end
 	local my, me, mc, oy, oe, oc = GetWeaponEnchantInfo();
 	if ( my ) then
