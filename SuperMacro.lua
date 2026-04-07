@@ -990,8 +990,10 @@ end
 function SortSuperMacroList()
 	-- sort SM_SUPER into ordered list
 	local a={};
-	for n in pairs(SM_SUPER) do
+	local n = next(SM_SUPER)
+	while n do
 		table.insert(a, n);
+		n = next(SM_SUPER, n)
 	end
 	table.sort(a, atoz);
 	return a;

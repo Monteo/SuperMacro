@@ -39,10 +39,12 @@ end
 
 -- Run all current scripts
 local function RunAllScripts()
-    for m,e in pairs(SM_EXTEND) do
+    local m,e = next(SM_EXTEND)
+    while m do
         if ( e ) then
             RunScript(e)
         end
+        m,e = next(SM_EXTEND, m)
     end
 end
 
