@@ -92,7 +92,7 @@ SlashCmdList["SUPERMACRO"] = function(msg)
 		end
 		text = tonumber(text);
 		if ( text and text >= 0 and text <= 3) then
-			if ( mod(text, 2) == 1 ) then
+			if ( math.mod(text, 2) == 1 ) then
 				SM_VARS.macroTip1 = 1;
 			else
 				SM_VARS.macroTip1 = 0;
@@ -670,12 +670,14 @@ end
 function SuperMacro_EventsFrame_OnEvent()
 	local ev = event;
 	if ( this.events[ev] ) then
-		for macro in pairs(this.events[ev]) do
+		local macro = next(this.events[ev])
+		while macro do
 			if ( strfind(macro, "^SUPER") ) then
 				RunSuperMacro( strsub( macro, 6) );
 			else
 				RunMacro( macro );
 			end
+			macro = next(this.events[ev], macro)
 		end
 	end
 end
