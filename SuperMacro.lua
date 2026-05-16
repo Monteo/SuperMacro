@@ -175,10 +175,10 @@ function SuperMacroFrame_Update()
 			-- Highlight Selected Macro
 			if ( macroID == SuperMacroFrame.selectedMacro ) then
 				macroButton:SetChecked(1);
-    				SuperMacroFrameSelectedMacroName:SetText(name);
-					SuperMacroFrameText:SetText(body);
+    				SuperMacroFrameSelectedMacroName:SetText(name or "");
+					SuperMacroFrameText:SetText(body or "");
 					SuperMacroFrameSelectedMacroButton:SetID(macroID);				
-    				SuperMacroFrameSelectedMacroButtonIcon:SetTexture(texture);
+    				SuperMacroFrameSelectedMacroButtonIcon:SetTexture(texture or "");
 			else
 				macroButton:SetChecked(0);
 			end
@@ -554,6 +554,7 @@ function SuperMacroFrame_SaveSuperMacro()
 end
 
 function SuperMacroFrame_OnEvent(event)
+	local player=UnitName("player").." of "..GetRealmName();
 	if ( event=="TRADE_SKILL_SHOW") then
 		if ( not old_SM_TradeSkillSkillButton_OnClick) then
 			old_SM_TradeSkillSkillButton_OnClick = TradeSkillSkillButton_OnClick;
@@ -624,7 +625,6 @@ function SuperMacroFrame_OnEvent(event)
 		ToggleSMWordWrap();
 		SuperMacroInitExtend()
 		SM_ORDERED=SortSuperMacroList();
-		local player=UnitName("player").." of "..GetRealmName();
 		if ( not SM_ACTION_SUPER[player] ) then
 			SM_ACTION_SUPER[player]={};
 		end
