@@ -260,10 +260,10 @@ function SuperMacroFrame_Update()
 			macroButton:Enable();
 			-- Highlight Selected Macro
 			if ( macroID == SuperMacroFrame.selectedSuper ) then
-				macroButton:SetChecked(1);
-				SuperMacroFrameSelectedMacroName:SetText(name);
-				SuperMacroFrameSuperText:SetText(body);
-				SuperMacroFrameSelectedMacroSuperButtonIcon:SetTexture(texture);
+			macroButton:SetChecked(1);
+			SuperMacroFrameSelectedMacroName:SetText(name or "");
+ 	 		SuperMacroFrameSuperText:SetText(body or "");
+			SuperMacroFrameSelectedMacroSuperButtonIcon:SetTexture(texture or "");
 			else
 				macroButton:SetChecked(0);
 			end
